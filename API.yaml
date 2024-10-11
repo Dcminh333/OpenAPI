@@ -1,0 +1,90 @@
+openapi: 3.0.0
+
+info:
+    title: Movie Payment System
+    description: API for processing payments when purchasing movie tickets
+    version 1.0.0
+
+servers:
+    url: https://api.movieticketpayment.com/v1
+    description: Production servers
+paths:
+    /payments:
+        post:
+        summary: Processing a new payment for a movie ticket
+        description: Initiate a payment 
+         requestBody:
+            required: true
+    get:
+        description: Process for getting payment 
+
+
+
+/payments{transactionID}
+get:
+    summary: Get Payment Status
+    paramenters:
+        -in: path
+         name: transactionID
+        required: true
+        schema:
+          type: string
+
+    responses:
+        '200': 
+            description: Status retrieved.
+        '404':
+            description: Transaction not
+
+post:
+    summary: Process a new Payment 
+    content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: string
+                  description: ID of the user.
+                ticketId:
+                  type: string
+                  description: ID of the ticket.
+                amount:
+                  type: number
+                  format: float
+                  description: Payment amount in USD.
+                paymentMethod:
+                  type: string
+                  enum: [card, paypal]
+                  description: Type of payment.
+                required: [userId, ticketId, amount, paymentMethod]
+
+    responses:
+        '201':
+          description: Payment processed.
+        '300':
+          description: Mising payment details.
+        '400':
+          description: Invalid payment details.
+        '500':
+          description: Server error.
+
+        
+delete:
+      summary: Cancel a payment.
+      parameters:
+        - in: path
+          name: transactionId
+          required: true
+          schema:
+            type: string
+          description: ID of the transaction.
+      responses:
+        '200':
+          description: Payment cancelled.
+        '400':
+          description: Cannot cancel.
+        '404':
+          description: Transaction not found.
+        '500':
+          description: Server error.
